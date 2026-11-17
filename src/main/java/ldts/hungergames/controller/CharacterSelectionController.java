@@ -19,7 +19,7 @@ public class CharacterSelectionController {
         switch (action) {
             case LEFT -> model.previous();
             case RIGHT -> model.next();
-            case SELECT -> machine.changeState(new ArenaState()); // J4: passar model.getSelected() à arena
+            case SELECT -> machine.changeState(new ArenaState(model.getSelected()));
             default -> { }
         }
     }

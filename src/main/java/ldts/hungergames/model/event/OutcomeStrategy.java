@@ -1,4 +1,4 @@
-package model.event;
+package ldts.hungergames.model.event;
 
 import java.util.Random;
 

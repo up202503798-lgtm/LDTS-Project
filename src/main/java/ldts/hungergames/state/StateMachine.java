@@ -5,6 +5,7 @@ import ldts.hungergames.gui.GUI;
 
 public class StateMachine {
     private State currentState;
+    private boolean running=true;
     public StateMachine(State firstState) {
         this.currentState = firstState;
     }
@@ -16,5 +17,11 @@ public class StateMachine {
     }
     public void draw(GUI gui){
         this.currentState.draw(gui);
+    }
+    public boolean isRunning() {
+        return running;
+    }
+    public void stop(){
+        this.running=false;
     }
 }

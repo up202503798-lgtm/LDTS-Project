@@ -57,6 +57,10 @@ public class ArenaBuilder {
         return this;
     }
 
+    public ArenaBuilder withItemAt(Position position, ItemType type) {
+        items.put(position, type);
+        return this;
+    }
     public Arena build() {
         return new Arena(width, height, walls, items, startPosition);
     }

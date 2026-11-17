@@ -66,4 +66,11 @@ class ArenaBuilderTest {
         assertEquals(2 * 80 + 2 * (24 - 2) + 19, arena.getWalls().size());
         assertEquals(12 + 4, arena.getItems().size());
     }
+    @Test
+    void placesAnItemAtAGivenPosition() {
+        Arena arena = new ArenaBuilder(10, 8, new Random(1))
+                .withItemAt(new Position(3, 3), ItemType.MEDKIT)
+                .build();
+        assertEquals(ItemType.MEDKIT, arena.getItems().get(new Position(3, 3)));
+    }
 }

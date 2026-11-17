@@ -1,4 +1,10 @@
 package model.event;
 
-public class DeadlyOutcome {
+import java.util.Random;
+
+public class DeadlyOutcome implements OutcomeStrategy {
+    @Override
+    public boolean survives(Random random) {
+        return false;
+    }
 }

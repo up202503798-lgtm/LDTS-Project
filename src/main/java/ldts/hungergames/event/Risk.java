@@ -1,4 +1,4 @@
-package ldts.hungergames.model.event;
+package ldts.hungergames.event;
 
 public enum Risk {
     SAFE(100), RISKY(50), DEADLY(0);

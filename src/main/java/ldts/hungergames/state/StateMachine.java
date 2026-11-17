@@ -5,8 +5,8 @@ import ldts.hungergames.gui.GUI;
 
 public class StateMachine {
     private State currentState;
-    public StateMachine(State currentState) {
-        this.currentState = currentState;
+    public StateMachine(State firstState) {
+        this.currentState = firstState;
     }
     public void changeState(State next){
         this.currentState = next;

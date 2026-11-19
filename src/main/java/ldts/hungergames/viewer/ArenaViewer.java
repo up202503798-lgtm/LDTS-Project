@@ -7,13 +7,19 @@ import ldts.hungergames.model.arena.ItemType;
 import ldts.hungergames.model.character.Character;
 import ldts.hungergames.model.character.Position;
 
+import java.util.List;
 import java.util.Map;
 
 public class ArenaViewer {
     public void draw(GUI gui, Arena arena, Character player) {
+        draw(gui, arena, player, List.of());
+    }
+
+    public void draw(GUI gui, Arena arena, Character player, List<Character> competitors) {
         gui.clear();
         drawWalls(gui, arena);
         drawItems(gui, arena);
+        drawCompetitors(gui, competitors);
         Position position = player.getPosition();
         gui.drawChar(position.x(), position.y(), '@', GuiColor.CYAN);
         drawStatus(gui, player);
@@ -31,6 +37,15 @@ public class ArenaViewer {
             switch (item.getValue()) {
                 case SUPPLY -> gui.drawChar(position.x(), position.y(), '*', GuiColor.YELLOW);
                 case MEDKIT -> gui.drawChar(position.x(), position.y(), '+', GuiColor.GREEN);
+            }
+        }
+    }
+
+    private void drawCompetitors(GUI gui, List<Character> competitors) {
+        for (Character competitor : competitors) {
+            if (competitor.isAlive()) {
+                Position position = competitor.getPosition();
+                gui.drawChar(position.x(), position.y(), competitor.getName().charAt(0), GuiColor.RED);
             }
         }
     }

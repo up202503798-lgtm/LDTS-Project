@@ -16,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyChar;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+
 
 class ArenaStateTest {
     private GUI gui;
@@ -43,5 +48,10 @@ class ArenaStateTest {
     void ignoresInputBeforeTheFirstDraw() {
         state.update(Action.RIGHT, mock(StateMachine.class));
         assertEquals(new Position(0, 0), player.getPosition());
+    }
+    @Test
+    void spawnsFiveCompetitors() {
+        state.draw(gui);
+        verify(gui, times(5)).drawChar(anyInt(), anyInt(), anyChar(), eq(GuiColor.RED));
     }
 }

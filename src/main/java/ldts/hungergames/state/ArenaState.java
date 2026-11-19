@@ -1,45 +1,69 @@
 package ldts.hungergames.state;
 
 import ldts.hungergames.controller.ArenaController;
+import ldts.hungergames.controller.CompetitorController;
 import ldts.hungergames.gui.Action;
 import ldts.hungergames.gui.GUI;
 import ldts.hungergames.model.arena.Arena;
 import ldts.hungergames.model.arena.ArenaBuilder;
+import ldts.hungergames.model.arena.CompetitorSpawner;
 import ldts.hungergames.model.character.Character;
+import ldts.hungergames.model.character.CharacterFactory;
 import ldts.hungergames.viewer.ArenaViewer;
 
+import java.util.List;
 import java.util.Random;
+import java.util.function.LongSupplier;
 
 public class ArenaState implements State {
+    private static final long COMPETITOR_INTERVAL_MILLIS = 500;
+
     private final Character player;
     private final Random random;
+    private final LongSupplier clock;
     private final ArenaViewer viewer = new ArenaViewer();
     private Arena arena;
+    private List<Character> competitors = List.of();
     private ArenaController controller;
+    private CompetitorController competitorController;
 
     public ArenaState(Character player) {
         this(player, new Random());
     }
 
     public ArenaState(Character player, Random random) {
+        this(player, random, System::currentTimeMillis);
+    }
+
+    public ArenaState(Character player, Random random, LongSupplier clock) {
         this.player = player;
         this.random = random;
+        this.clock = clock;
     }
 
     @Override
     public void update(Action action, StateMachine machine) {
-        if (controller != null) {
-            controller.update(action, machine);
+        if (controller == null) {
+            return;
         }
+        controller.update(action, machine);
+        competitorController.update();
     }
 
     @Override
     public void draw(GUI gui) {
         if (arena == null) {
-            arena = ArenaBuilder.initialArena(gui.getWidth(), gui.getHeight(), random);
-            player.setPosition(arena.getStartPosition());
-            controller = new ArenaController(arena, player);
+            build(gui);
         }
-        viewer.draw(gui, arena, player);
+        viewer.draw(gui, arena, player, competitors);
+    }
+
+    private void build(GUI gui) {
+        arena = ArenaBuilder.initialArena(gui.getWidth(), gui.getHeight(), random);
+        player.setPosition(arena.getStartPosition());
+        competitors = new CompetitorSpawner(new CharacterFactory(), random).spawn(arena, player);
+        controller = new ArenaController(arena, player, competitors);
+        competitorController = new CompetitorController(controller, competitors, random, clock,
+                COMPETITOR_INTERVAL_MILLIS);
     }
 }

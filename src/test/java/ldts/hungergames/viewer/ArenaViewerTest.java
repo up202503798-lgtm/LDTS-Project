@@ -13,12 +13,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 
 class ArenaViewerTest {
     private GUI gui;
@@ -67,5 +69,19 @@ class ArenaViewerTest {
     void drawsTheStatusLine() {
         viewer.draw(gui, arena, player);
         verify(gui).drawText(eq(2), eq(0), contains("Vida: 100/100"), any());
+    }
+    @Test
+    void drawsLivingCompetitorsWithTheirInitial() {
+        Character competitor = new CharacterFactory().create(Trait.HEALER, new Position(2, 2));
+        viewer.draw(gui, arena, player, List.of(competitor));
+        verify(gui).drawChar(2, 2, 'H', GuiColor.RED);
+    }
+
+    @Test
+    void doesNotDrawDeadCompetitors() {
+        Character competitor = new CharacterFactory().create(Trait.HEALER, new Position(2, 2));
+        competitor.takeDamage(1000);
+        viewer.draw(gui, arena, player, List.of(competitor));
+        verify(gui, never()).drawChar(2, 2, 'H', GuiColor.RED);
     }
 }

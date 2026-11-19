@@ -29,4 +29,29 @@ class GameEventsTest {
             assertFalse(option.message().isBlank());
         }
     }
+
+    @Test
+    void forestAllianceHasThreeOptionsFromRiskyToDeadly() {
+        List<Option> options = GameEvents.forestAlliance().options();
+
+        assertEquals(3, options.size());
+        assertEquals(Risk.RISKY, options.get(0).risk());
+        assertEquals(Risk.SAFE, options.get(1).risk());
+        assertEquals(Risk.DEADLY, options.get(2).risk());
+    }
+
+    @Test
+    void forestResourcesHasThreeOptionsAndAllTheText() {
+        GameEvent event = GameEvents.forestResources();
+
+        assertEquals(Risk.SAFE, event.options().get(0).risk());
+        assertEquals(Risk.RISKY, event.options().get(1).risk());
+        assertEquals(Risk.DEADLY, event.options().get(2).risk());
+        assertFalse(event.title().isBlank());
+        assertFalse(event.text().isBlank());
+        for (Option option : event.options()) {
+            assertFalse(option.text().isBlank());
+            assertFalse(option.message().isBlank());
+        }
+    }
 }

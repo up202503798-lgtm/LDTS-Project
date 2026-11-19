@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -97,5 +98,15 @@ class ArenaControllerTest {
         Character other = new CharacterFactory().create(Trait.FAST, new Position(2, 2));
         assertTrue(controller.move(other, Action.RIGHT));
         assertEquals(new Position(3, 2), other.getPosition());
+    }
+    @Test
+    void charactersCannotWalkThroughEachOther() {
+        Character other = new CharacterFactory().create(Trait.FAST, new Position(5, 3));
+        ArenaController crowded = new ArenaController(arena, player, List.of(other));
+
+        assertFalse(crowded.move(player, Action.UP));
+        assertFalse(crowded.move(other, Action.DOWN));
+        assertEquals(new Position(5, 4), player.getPosition());
+        assertEquals(new Position(5, 3), other.getPosition());
     }
 }

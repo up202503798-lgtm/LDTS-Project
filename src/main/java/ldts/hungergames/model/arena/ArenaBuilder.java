@@ -75,6 +75,21 @@ public class ArenaBuilder {
                 .build();
     }
 
+    public static Arena forestArena(int width, int height, Random random) {
+        int area = width * height;
+        return new ArenaBuilder(width, height, random)
+                .withBorderWalls()
+                .withRandomWalls(area / 40)
+                .withItems(ItemType.SUPPLY, area / 100)
+                .build();
+    }
+
+    public static Arena forType(ArenaType type, int width, int height, Random random) {
+        return type == ArenaType.FOREST
+                ? forestArena(width, height, random)
+                : initialArena(width, height, random);
+    }
+
     private List<Position> pickFreePositions(int count) {
         List<Position> free = new ArrayList<>();
         for (int x = 1; x < width - 1; x++) {

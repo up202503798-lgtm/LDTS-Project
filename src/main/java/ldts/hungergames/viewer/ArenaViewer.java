@@ -6,11 +6,22 @@ import ldts.hungergames.model.arena.Arena;
 import ldts.hungergames.model.arena.ItemType;
 import ldts.hungergames.model.character.Character;
 import ldts.hungergames.model.character.Position;
+import ldts.hungergames.model.arena.ArenaType;
 
 import java.util.List;
 import java.util.Map;
 
 public class ArenaViewer {
+    private final ArenaType type;
+
+    public ArenaViewer() {
+        this(ArenaType.INITIAL);
+    }
+
+    public ArenaViewer(ArenaType type) {
+        this.type = type;
+    }
+
     public void draw(GUI gui, Arena arena, Character player) {
         draw(gui, arena, player, List.of());
     }
@@ -26,8 +37,11 @@ public class ArenaViewer {
     }
 
     private void drawWalls(GUI gui, Arena arena) {
+        boolean forest = type == ArenaType.FOREST;
+        char symbol = forest ? 'T' : '#';
+        GuiColor color = forest ? GuiColor.GREEN : GuiColor.WHITE;
         for (Position wall : arena.getWalls()) {
-            gui.drawChar(wall.x(), wall.y(), '#', GuiColor.WHITE);
+            gui.drawChar(wall.x(), wall.y(), symbol, color);
         }
     }
 
